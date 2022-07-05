@@ -10,7 +10,7 @@ Thank you for considering to contribute.
 
 ## Installation
 
-Type ```npm install andychukse/s3downloadzip ``` or ```yarn add andychukse/s3downloadzip``` 
+Type ```npm install s3downloadzip ``` or ```yarn add s3downloadzip``` 
 
 
 ## Usage
