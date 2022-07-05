@@ -24,13 +24,13 @@
   },
   "homepage": "https://github.com/andychukse/s3downloadzip#readme",
   "dependencies": {
-    "archiver": "^3.1.1",
-    "aws-sdk": "^2.454.0"
+    "archiver": "^5.3.1",
+    "aws-sdk": "^2.1167.0",
+    "dotenv": "^16.0.1"
   },
   "devDependencies": {
     "express": "^4.17.1",
+    "node-mocks-http": "^1.11.0",
     "prettier": "^1.18.2"
   }
 }
-
-

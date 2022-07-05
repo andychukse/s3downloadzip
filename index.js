@@ -3,18 +3,19 @@ const archiver = require('archiver'),
 	  aws = require('aws-sdk'),
 	  stream = require('stream');
 
-const randomString = async (N) {
+const randomString =  (N=12) => {
   return Array(N + 1)
     .join((Math.random().toString(36) + '00000000000000000').slice(2, 18))
     .slice(0, N);
 }
+const path = require('path');
 
 module.exports = {
-	  s3DownloadMultiple : async({s3, files, bucket,res}) => {
+	  s3DownloadMultiple : async({s3, files, bucket, res, fileName=''}) => {
 		  try {
 
-		   let fileName = randomString(10);
-		   let theFile = fileName +'.zip';
+		   let name = (fileName) ? fileName : randomString(10);
+		   let theFile = name +'.zip';
 
 		   const Bucket = bucket;
 
@@ -50,7 +51,6 @@ module.exports = {
 		  });
 
 		  archive.pipe(res);
-		  //archive.pipe(fs.createWriteStream(theFile));
 		  archive.finalize();
 
 		  } catch (err) {
