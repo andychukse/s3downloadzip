@@ -23,9 +23,6 @@
     "url": "https://github.com/andychukse/s3downloadzip/issues"
   },
   "homepage": "https://github.com/andychukse/s3downloadzip#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/andychukse"
-  },
   "dependencies": {
     "archiver": "^5.3.1",
     "aws-sdk": "^2.1167.0"
