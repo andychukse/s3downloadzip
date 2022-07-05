@@ -1,6 +1,6 @@
 {
   "name": "s3downloadzip",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Download Multiple files from s3 nodejs",
   "main": "index.js",
   "scripts": {
