@@ -1,5 +1,5 @@
 {
-  "name": "s3downloadzip",
+  "name": "@andychukse/s3downloadzip",
   "version": "1.0.0",
   "description": "Download Multiple files from s3 nodejs",
   "main": "index.js",
@@ -17,12 +17,16 @@
     "zip",
     "stream"
   ],
-  "author": "Andrew Eze",
+  "author": {
+    "name": "Andrew Eze",
+    "email": "pacodas@nairabrains.com",
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/andychukse/s3downloadzip/issues"
   },
   "homepage": "https://github.com/andychukse/s3downloadzip#readme",
+  "registry": "https://npm.pkg.github.com/andychukse",
   "dependencies": {
     "archiver": "^5.3.1",
     "aws-sdk": "^2.1167.0",
