@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/andychukse/s3downloadzip.git"
+    "url": "https://github.com/andychukse/s3downloadzip.git"
   },
   "keywords": [
     "s3",
