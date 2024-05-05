@@ -1,7 +1,7 @@
 {
   "name": "s3downloadzip",
   "version": "1.0.3",
-  "description": "Download Multiple files from s3 nodejs",
+  "description": "Download Multiple files as Zip from AWS S3 or Digitalocean Spaces or any s3 compatible object storage service",
   "main": "index.js",
   "scripts": {
     "format": "prettier --single-quote --print-width 80 --trailing-comma es5 --write \"app/**/*.js\"",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/andychukse/s3downloadzip.git"
+    "url": "git+https://github.com/andychukse/s3downloadzip.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
