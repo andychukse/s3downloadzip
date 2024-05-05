@@ -1,31 +1,29 @@
-require('dotenv').config();
-const express = require('express'),
-    app = express(),
-    {s3DownloadMultiple} = require('./index');
-const aws = require('aws-sdk');
-const httpMocks = require('node-mocks-http');
+// test.js
+const server = require('./app');
+const supertest = require('supertest');
+const requestWithSupertest = supertest(server);
 
-const s3 = new aws.S3({
-  accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
-  Bucket: process.env.AWS_S3_BUCKET,
-  signatureVersion: 'v4',
+describe('GET /', () => {
+  it('should respond with a 200 status code', async () => {
+    const res = await requestWithSupertest.get('/');
+    expect(res.status).toBe(200);
+  });
+
+  it('should respond with the text "Hello World!"', async () => {
+    const res = await requestWithSupertest.get('/');
+    expect(res.text).toBe('Hello World!');
+  });
 });
 
-console.log(process.env.AWS_S3_BUCKET);
-const files = [
-    {name: 'courses/files/2020/01/module_11582901183282-681582xr90110r8328q62.mp4'},
-    {name: 'courses/files/2020/01/module_11582901320037-ej15820t9013382003vu7.mp4'}
-    ];
-const res = httpMocks.createResponse();
+describe('GET /download', () => {
+  it('should download a file', async () => {
+    const res= await requestWithSupertest.get('/download');
+    expect(res.status).toEqual(200);
+    expect(res.headers['content-type']).toBe('application/zip');
+  });
+});
 
-s3DownloadMultiple({
-    s3: s3, 
-    files: files, 
-    bucket: process.env.AWS_S3_BUCKET,
-    res,
-    fileName: 'sample_file'
-})
-    .catch(err=>console.log(err));
-    
-app.listen(8200,()=>console.log("server running"))
+afterAll(async () => {
+  await new Promise((resolve) => setTimeout(() => resolve(), 500)); // avoid jest open handle error
+  server.close();
+});
