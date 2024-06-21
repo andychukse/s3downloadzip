@@ -1,6 +1,6 @@
 {
   "name": "@andychukse/s3downloadzip",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Download Multiple files as Zip from AWS S3 or Digitalocean Spaces or any s3 compatible object storage service",
   "main": "index.js",
   "scripts": {
