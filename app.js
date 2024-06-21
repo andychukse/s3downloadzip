@@ -3,9 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const { s3DownloadMultiple } = require('./index');
-// const express = require('express'),
-//     app = express(),
-//     {s3DownloadMultiple} = require('./index');
+
 const aws = require('aws-sdk');
 const httpMocks = require('node-mocks-http');
 
