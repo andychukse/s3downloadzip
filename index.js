@@ -1,60 +1,52 @@
 'use strict';
 const archiver = require('archiver'),
-	  aws = require('aws-sdk'),
+	  { GetObjectCommand } = require('@aws-sdk/client-s3'),
 	  stream = require('stream');
 
-const randomString =  (N=12) => {
+const randomString = (N = 12) => {
   return Array(N + 1)
     .join((Math.random().toString(36) + '00000000000000000').slice(2, 18))
     .slice(0, N);
-}
+};
 const path = require('path');
 
 module.exports = {
-	  s3DownloadMultiple : async({s3, files, bucket, res, fileName=''}) => {
-		  try {
+  s3DownloadMultiple: async ({ s3, files, bucket, res, fileName = '' }) => {
+    try {
+      const name = fileName ? fileName : randomString(10);
+      const theFile = name + '.zip';
+      const Bucket = bucket;
 
-		   let name = (fileName) ? fileName : randomString(10);
-		   let theFile = name +'.zip';
+      res.attachment(theFile);
+      const archive = archiver('zip', { store: true });
 
-		   const Bucket = bucket;
+      files.forEach(function (file) {
+        if (file.name) {
+          const params = {
+            Bucket: Bucket,
+            Key: file.name,
+          };
 
-		   res.attachment(theFile);
-		   var archive = archiver('zip', {
-		    store: true
-		  });
+          const fStream = new stream.PassThrough();
 
-		  files.forEach(function(file) {
-		    if (file.name) {
-		      var params = {
-		        Bucket: Bucket,
-		        Key: file.name
-		      };
+          // Kick off async S3 request and pipe body into PassThrough
+          s3.send(new GetObjectCommand(params))
+            .then((response) => {
+              response.Body.pipe(fStream);
+              response.Body.on('error', (err) => fStream.emit('error', err));
+            })
+            .catch((err) => fStream.emit('error', err));
 
-		      // Lazy requesting - only request when something is listening
-		      var fStream = new stream.PassThrough();
-		      var sent = false;
-		      fStream.on('newListener', function(event) {
-		        if (!sent && event === 'data') {
-		          var req = s3.getObject(params);
-		          var rStream = req.createReadStream();
-		          rStream.pipe(fStream);
-		          rStream.on('error', err => fStream.emit('error', err));
-		          sent = true;
-		        }
-		      });
+          const fileDate = file.createdAt ? file.createdAt : new Date();
 
-		      var fileDate = file.createdAt ? file.createdAt : new Date();
+          archive.append(fStream, { name: path.basename(file.name), date: fileDate });
+        }
+      });
 
-		      archive.append(fStream, {name: path.basename(file.name), date: fileDate});
-		    } 
-		  });
-
-		  archive.pipe(res);
-		  archive.finalize();
-
-		  } catch (err) {
-		    throw err;
-		  }
-		}
-	}
+      archive.pipe(res);
+      archive.finalize();
+    } catch (err) {
+      throw err;
+    }
+  },
+};

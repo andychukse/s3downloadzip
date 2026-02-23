@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const { s3DownloadMultiple } = require('./index');
 
-const aws = require('aws-sdk');
+const { S3Client } = require('@aws-sdk/client-s3');
 const httpMocks = require('node-mocks-http');
 
 const PORT = 8200;
@@ -44,13 +44,14 @@ app.get('/download', async (req, res) => {
 
         var fileName = 'sample_file'; //you can set optional zip file name here, if empty it will generate a random name
 
-        const s3 = new aws.S3({
-        accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
-        Bucket: bucket,
-        signatureVersion: 'v4'
-        // endpoint: process.env.AWS_S3_ENDPOINT,
-      });
+        const s3 = new S3Client({
+          region: process.env.AWS_S3_REGION || 'us-east-1',
+          credentials: {
+            accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+            secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+          },
+          // endpoint: process.env.AWS_S3_ENDPOINT,
+        });
 
 
 
