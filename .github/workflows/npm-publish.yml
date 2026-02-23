@@ -31,16 +31,31 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write # Required to publish to GitHub Packages
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+        with:
+            fetch-depth: 0
+      - name: Automated Version Bump
+        id: version_bump
+        uses: phips28/gh-action-bump-version@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          # Automatically detects 'feat' for minor, 'fix' for patch, etc.
+          default: patch 
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
           registry-url: "https://npm.pkg.github.com"
           # scope: '@andychukse'
-      - run: npm ci
-      - run: npm publish --access public
+      - name: Install Packages
+        run: npm ci
+
+      - name: Publish to GitHub Packages
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
